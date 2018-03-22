@@ -12,10 +12,10 @@ class AccountManager(BaseUserManager):
         account=self.model(
 
         username=username,
-        first_name=kwargs.get('first_name',"Ritika"),
-        last_name=kwargs.get('last_name',"Mittal"),
-        email=kwargs.get('email',"ritikamittal1701@gmail.com"),
-        phonenum=kwargs.get('phonenum',"9871402961"),
+        first_name=kwargs.get('first_name'),
+        last_name=kwargs.get('last_name'),
+        email=kwargs.get('email'),
+        phonenum=kwargs.get('phonenum'),
         )
         account.is_staff = False
         account.is_superuser=False
@@ -25,7 +25,6 @@ class AccountManager(BaseUserManager):
         return account
 
     def create_superuser(self,username,password=None,**kwargs):
-        
         account=self.create_user(username,password,**kwargs)
         account.is_superuser=True
         account.is_admin=True
@@ -39,8 +38,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
     username=models.CharField(unique=True,max_length=50)
     first_name=models.CharField(max_length=100,default='Ritika')
     last_name=models.CharField(max_length=100,default='Mittal')
-    email=models.EmailField(default='ritika1701@gmail.com')
-    phonenum=models.CharField(max_length=10,default='9871402961')
+    email=models.EmailField(unique=True,default='ritika1701@gmail.com')
+    phonenum=models.CharField(unique=True,max_length=10,default='9871402961')
     is_admin=models.BooleanField(default=False)
     is_staff=models.BooleanField(default=False)
     is_superuser=models.BooleanField(default=False)
@@ -49,4 +48,4 @@ class Account(AbstractBaseUser, PermissionsMixin):
     objects=AccountManager()
 
     USERNAME_FIELD='username'
-    REQUIRED_FIELDS=[]
+    REQUIRED_FIELDS=['first_name','last_name','email','phonenum']
