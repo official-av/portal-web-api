@@ -17,19 +17,22 @@ class AccountSerializer(serializers.ModelSerializer):
 
 
     def create(self, validated_data):
+
+        print('create')
         return Account.objects.create_user(**validated_data)
 
     def update(self, instance, validated_data):
+        print('update')
         instance.email = validated_data.get('email', instance.email)
         instance.username = validated_data.get('username',
                                                instance.username)
-        instance.firs_tname = validated_data.get('first_name',
-                                                instance.firs_tname)
+        instance.first_name = validated_data.get('first_name',
+                                                instance.first_name)
         instance.last_name = validated_data.get('last_name',
                                                instance.last_name)
 
-        instance.phonemum = validated_data.get('phonemum',
-                                               instance.phonemum)
+        instance.phonenum = validated_data.get('phonenum',
+                                               instance.phonenum)
 
         password = validated_data.get('password', None)
         confirm_password = validated_data.get('confirm_password', None)
@@ -51,3 +54,10 @@ class AccountSerializer(serializers.ModelSerializer):
                     "The passwords have to be the same"
                 )
         return data
+class AccountGetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Account
+        fields = (
+            'id', 'username', 'first_name', 'last_name',
+            'email', 'password','phonenum')
