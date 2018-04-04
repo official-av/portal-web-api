@@ -1,47 +1,32 @@
 from django.contrib.auth import update_session_auth_hash
 from rest_framework import serializers
-
-from .models import Account
+from django.contrib.auth.models import User
+from .models import Account,Department
+from django.contrib.auth.hashers import make_password
 
 
 class AccountSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True)
     confirm_password = serializers.CharField(write_only=True, required=True)
+    username = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = Account
         fields = (
-            'id', 'username', 'first_name', 'last_name',
-            'email', 'password', 'confirm_password','phonenum')
-
-
+            'username', 'email', 'password', 'confirm_password', 'phonenum', 'first_name', 'last_name','dept')
 
     def create(self, validated_data):
+        a = Account.objects.create(
+                                  email=validated_data['email'],
+                                  phonenum=validated_data['phonenum'],
+                                  user=User.objects.create(username=validated_data['username'],
+                                                           password=make_password(validated_data['password'])),
+                                  last_name=validated_data['last_name'],
+                                  first_name=validated_data['first_name'],
+                                  dept=validated_data['dept'])
 
-        print('create')
-        return Account.objects.create_user(**validated_data)
-
-    def update(self, instance, validated_data):
-        print('update')
-        instance.email = validated_data.get('email', instance.email)
-        instance.username = validated_data.get('username',
-                                               instance.username)
-        instance.first_name = validated_data.get('first_name',
-                                                instance.first_name)
-        instance.last_name = validated_data.get('last_name',
-                                               instance.last_name)
-
-        instance.phonenum = validated_data.get('phonenum',
-                                               instance.phonenum)
-
-        password = validated_data.get('password', None)
-        confirm_password = validated_data.get('confirm_password', None)
-
-        if password and password == confirm_password:
-            instance.set_password(password)
-
-        instance.save()
-        return instance
+        a.save()
+        return a
 
     def validate(self, data):
         '''
@@ -59,5 +44,5 @@ class AccountGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = (
-            'id', 'username', 'first_name', 'last_name',
-            'email', 'password','phonenum')
+             'username', 'first_name', 'last_name',
+            'email', 'dept','phonenum')

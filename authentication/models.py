@@ -1,51 +1,26 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
-from django.contrib.auth.models import PermissionsMixin
-
-class AccountManager(BaseUserManager):
-    def create_user(self,username,password=None,**kwargs):
-
-        if not username:
-            raise ValueError('Users must have a valid username')
+from django.contrib.auth.models import PermissionsMixin,User
 
 
-        account=self.model(
 
-        username=username,
-        first_name=kwargs.get('first_name'),
-        last_name=kwargs.get('last_name'),
-        email=kwargs.get('email'),
-        phonenum=kwargs.get('phonenum'),
-        )
-        account.is_staff = False
-        account.is_superuser=False
-        account.set_password(password)
-        account.save()
+class Department(models.Model):
+    department_name=models.CharField(unique=True,max_length=100)
 
-        return account
-
-    def create_superuser(self,username,password=None,**kwargs):
-        account=self.create_user(username,password,**kwargs)
-        account.is_superuser=True
-        account.is_admin=True
-        account.is_staff = True
-        account.save()
-
-        return account
+    def __str__(self):
+        return self.department_name
 
 
-class Account(AbstractBaseUser, PermissionsMixin):
-    username=models.CharField(unique=True,max_length=50)
+class Account(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name=models.CharField(max_length=100,default='Ritika')
     last_name=models.CharField(max_length=100,default='Mittal')
-    email=models.EmailField(unique=True,default='ritika1701@gmail.com')
-    phonenum=models.CharField(unique=True,max_length=10,default='9871402961')
-    is_admin=models.BooleanField(default=False)
-    is_staff=models.BooleanField(default=False)
-    is_superuser=models.BooleanField(default=False)
+    email=models.EmailField(unique=True)
+    phonenum=models.CharField(unique=True,max_length=10)
+    dept=models.ForeignKey(Department, on_delete=models.CASCADE)
+    mobile_flag=models.BooleanField(default=False)
+    email_flag=models.BooleanField(default=False)
+    status_flag=models.BooleanField(default=False)
 
 
-    objects=AccountManager()
-
-    USERNAME_FIELD='username'
-    REQUIRED_FIELDS=['first_name','last_name','email','phonenum']
+    def __str__(self):
+        return self.email
