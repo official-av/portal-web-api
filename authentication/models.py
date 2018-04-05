@@ -36,7 +36,7 @@ class PortalQuestion(models.Model):
     is_answered = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.ques_id)
+        return str(self.id)
 
 
 class PortalRecommendation(models.Model):
