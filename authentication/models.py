@@ -24,3 +24,26 @@ class Account(models.Model):
 
     def __str__(self):
         return self.email
+
+class PortalQuestion(models.Model):
+
+
+    text = models.CharField(max_length=500, null=False)
+    timestamp = models.DateTimeField("Date Question is Published")
+    deadline = models.DateTimeField("Date to be Answered Within")
+    asked_by_id = models.ForeignKey(Account, on_delete=models.CASCADE)
+    is_recommended = models.BooleanField(default=False)
+    is_answered = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.ques_id)
+
+
+class PortalRecommendation(models.Model):
+
+    ques_id = models.ForeignKey(PortalQuestion, on_delete=models.CASCADE)
+    by_id = models.ForeignKey(Account, on_delete=models.CASCADE)
+    recommendation_answer = models.CharField(max_length=500, null=False)
+
+    def __str__(self):
+        return  str(self.recommendation_id)

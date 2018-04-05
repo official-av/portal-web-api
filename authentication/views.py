@@ -6,6 +6,7 @@ from .serializers import AccountSerializer,AccountGetSerializer
 from .models import Account
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
+import json,nexmo,random
 
 class AuthRegister(APIView):
     """
@@ -56,3 +57,16 @@ class Profile(APIView):
         account = self.get_object(username)
         serializer=self.serializer_class(account)
         return Response(serializer.data)
+
+class OtpRegister(APIView):
+
+    def post(self,request,format=None):
+        length=5
+        data=request.data
+
+        mobile_number=data['phonenum']
+        client = nexmo.Client(key='66505af0', secret='cltyPLV3jQJQYYwX')
+        b=random.sample(range(10**(length-1), 10**length), 1)[0]
+        client.send_message({'from': '919473805008', 'to': mobile_number, 'text': b})
+
+        return Response({'text':b}, status=status.HTTP_201_CREATED)
