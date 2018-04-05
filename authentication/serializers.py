@@ -55,8 +55,8 @@ class QuestionSerializer(serializers.ModelSerializer):
 
         def create(self,validated):
             a=PortalQuestion.objects.create(
-    text = validated_data['text'],timestamp = validated_data['timestamp'],deadline =validated_data['deadline'],
+                text = validated_data['text'],timestamp = validated_data['timestamp'],deadline =validated_data['deadline'],
            asked_by_id = validated_data['asked_by_id'])
-           a.save()
+            a.save()
 
-           return a
+            return a

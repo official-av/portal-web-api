@@ -23,7 +23,7 @@ class Account(models.Model):
 
 
     def __str__(self):
-        return self.email
+        return str(self.id)
 
 class PortalQuestion(models.Model):
 
@@ -46,4 +46,9 @@ class PortalRecommendation(models.Model):
     recommendation_answer = models.CharField(max_length=500, null=False)
 
     def __str__(self):
-        return  str(self.recommendation_id)
+        return  str(self.id)
+
+class AuthViewer(models.Model):
+
+    question_id = models.ForeignKey(PortalQuestion, on_delete=models.CASCADE)
+    department_id = models.ForeignKey(Department, on_delete=models.CASCADE)
