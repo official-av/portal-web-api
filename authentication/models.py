@@ -7,7 +7,7 @@ class Department(models.Model):
     department_name=models.CharField(unique=True,max_length=100)
 
     def __str__(self):
-        return self.department_name
+        return str(self.id)
 
 
 class Account(models.Model):
@@ -52,3 +52,6 @@ class AuthViewer(models.Model):
 
     question_id = models.ForeignKey(PortalQuestion, on_delete=models.CASCADE)
     department_id = models.ForeignKey(Department, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return  str(self.id)

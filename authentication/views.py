@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from .serializers import AccountSerializer,AccountGetSerializer,QuestionSerializer
-from .models import Account
+from .models import Account,PortalQuestion,AuthViewer
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
 import json,nexmo,random
@@ -78,7 +78,12 @@ class CreateQuestion(APIView):
 
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
+        data=request.data
         if serializer.is_valid():
             serializer.save()
+            a=PortalQuestion.objects.get(text=data['text'],asked_by_id=data['asked_by_id'])
+            c=Account.objects.get(pk=data['asked_by_id'])
+            b=AuthViewer.objects.create(question_id=a,department_id=c.dept)
+            b.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
