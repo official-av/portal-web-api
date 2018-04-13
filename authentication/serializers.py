@@ -1,7 +1,7 @@
 from django.contrib.auth import update_session_auth_hash
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Account,Department,PortalQuestion,AuthViewer
+from .models import Account,Department,PortalQuestion
 from django.contrib.auth.hashers import make_password
 
 
@@ -45,7 +45,7 @@ class AccountGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = (
-             'username', 'first_name', 'last_name',
+              'first_name', 'last_name',
             'email', 'dept','phonenum','mobile_flag','email_flag')
 
 
@@ -54,7 +54,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=PortalQuestion
-        fields=('text','timestamp','deadline','asked_by_id')
+        fields=('text','timestamp','deadline','asked_by_id','answer','answered_on')
 
         def create(self,validated):
             a=PortalQuestion.objects.create(

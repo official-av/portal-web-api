@@ -3,10 +3,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from .serializers import AccountSerializer,AccountGetSerializer,QuestionSerializer
-from .models import Account,PortalQuestion,AuthViewer
+from .models import Account,PortalQuestion
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
 import json,nexmo,random
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
 class AuthRegister(APIView):
     """
@@ -20,42 +23,41 @@ class AuthRegister(APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            print('error')
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class Update(APIView):
 
-    serializer_class = AccountSerializer
+
+
+    def post(self,request,format=None):
+        data=request.data
+        a=User.objects.get(username=data['username'])
+
+        if(data['password']==data['confirm_password']):
+
+            a.password=make_password(data['password'])
+            a.save()
+            return Response({'sucess':'Yes'}, status=status.HTTP_201_CREATED)
+        return Response({'sucess':'No'}, status=status.HTTP_400_BAD_REQUEST)
+
+class Profile(APIView):
+    serializer_class = AccountGetSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_object(self, username):
         try:
-            return Account.objects.get(username=username)
-        except Account.DoesNotExist:
-            raise Http404
 
-    def put(self,request,username,format=None):
-        account = self.get_object(username)
-        serializer = self.serializer_class(account, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class Profile(APIView):
-    serializer_class = AccountGetSerializer
-    permission_classes = (IsAuthenticated)
-
-    def get_object(self, username):
-        try:
-            return Account.objects.get(username=username)
-        except Account.DoesNotExist:
-            raise Http404
+            return User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise Http404("Error")
 
     def get(self,request,username,format=None):
+
+
         account = self.get_object(username)
-        serializer=self.serializer_class(account)
+        acc=Account.objects.get(user_id=account)
+        serializer=self.serializer_class(acc)
         return Response(serializer.data)
 
 class OtpRegister(APIView):
@@ -87,3 +89,30 @@ class CreateQuestion(APIView):
             b.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class checkPassword(APIView):
+
+
+    def post(self,request,format=None):
+        data=request.data
+        account = authenticate(username=data['username'],password=data['password'])
+        if(account!=None):
+            return Response({'response':'match'},status=status.HTTP_201_CREATED)
+        else:
+            return Response({'response':'error'},status=status.HTTP_400_BAD_REQUEST)
+
+class checkUsername(APIView):
+
+    def get_object(self, username):
+        try:
+            return User.objects.get(username=username)
+        except User.DoesNotExist:
+            return None
+
+    def post(self,request,format=None):
+        account=self.get_object(request.data['username'])
+        if(account!=None):
+            return Response({'user':'exists'},status=status.HTTP_201_CREATED)
+        else:
+            return Response({'user':'does not exists'},status=status.HTTP_400_BAD_REQUEST)
