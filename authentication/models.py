@@ -51,8 +51,3 @@ class PortalRecommendation(models.Model):
 
     def __str__(self):
         return  str(self.id)
-
-
-
-    def __str__(self):
-        return  str(self.id)

@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from .serializers import AccountSerializer,AccountGetSerializer,QuestionSerializer
+from .serializers import AccountSerializer,AccountGetSerializer,QuestionSerializer,InviteSerializer
 from .models import Account,PortalQuestion
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
@@ -39,6 +39,7 @@ class Update(APIView):
             a.password=make_password(data['password'])
             a.save()
             return Response({'sucess':'Yes'}, status=status.HTTP_201_CREATED)
+
         return Response({'sucess':'No'}, status=status.HTTP_400_BAD_REQUEST)
 
 class Profile(APIView):
@@ -79,14 +80,8 @@ class CreateQuestion(APIView):
 
 
     def post(self, request, format=None):
-        serializer = self.serializer_class(data=request.data)
-        data=request.data
         if serializer.is_valid():
             serializer.save()
-            a=PortalQuestion.objects.get(text=data['text'],asked_by_id=data['asked_by_id'])
-            c=Account.objects.get(pk=data['asked_by_id'])
-            b=AuthViewer.objects.create(question_id=a,department_id=c.dept)
-            b.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -116,3 +111,20 @@ class checkUsername(APIView):
             return Response({'user':'exists'},status=status.HTTP_201_CREATED)
         else:
             return Response({'user':'does not exists'},status=status.HTTP_400_BAD_REQUEST)
+
+class Invitation(APIView):
+
+    serializer_class = InviteSerializer
+    permission_classes = (AllowAny,)
+
+
+    def post(self, request, format=None):
+        data=request.data
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            a=PortalQuestion.objects.get(pk=data['ques_id'])
+            a.is_recommended=True
+            a.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

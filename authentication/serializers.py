@@ -1,7 +1,7 @@
 from django.contrib.auth import update_session_auth_hash
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Account,Department,PortalQuestion
+from .models import Account,Department,PortalQuestion,PortalRecommendation
 from django.contrib.auth.hashers import make_password
 
 
@@ -61,5 +61,15 @@ class QuestionSerializer(serializers.ModelSerializer):
                 text = validated_data['text'],timestamp = validated_data['timestamp'],deadline =validated_data['deadline'],
            asked_by_id = validated_data['asked_by_id'])
 
+            a.save()
+            return a
+class InviteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=PortalRecommendation
+        fields='__all__'
+
+        def create(self,validated):
+            a=PortalRecommendation.objects.create(ques_id=validated_data['ques_id'],department_id=validated_data['dept'])
             a.save()
             return a

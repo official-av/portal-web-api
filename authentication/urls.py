@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import  AuthRegister,Update,Profile,OtpRegister,CreateQuestion,checkPassword,checkUsername
+from .views import  AuthRegister,Update,Profile,OtpRegister,CreateQuestion,checkPassword,checkUsername,Invitation
 from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns=[
@@ -11,4 +11,5 @@ urlpatterns=[
   url(r'^viewprofile/(?P<username>[A-Za-z0-9]+)/$', Profile.as_view()),
   url(r'^check/$',checkPassword.as_view()),
   url(r'^username/$',checkUsername.as_view()),
+  url(r'^invite/$',Invitation.as_view()),
 ]
