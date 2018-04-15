@@ -2,10 +2,11 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from .serializers import AccountSerializer,AccountGetSerializer,QuestionSerializer,InviteSerializer
-from .models import Account,PortalQuestion
+from .serializers import AccountSerializer,AccountGetSerializer,QuestionSerializer,InviteSerializer,DirectSerializer
+from .models import Account,PortalQuestion,PortalRecommendation
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 import json,nexmo,random
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
@@ -44,7 +45,8 @@ class Update(APIView):
 
 class Profile(APIView):
     serializer_class = AccountGetSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
+
 
     def get_object(self, username):
         try:
@@ -54,7 +56,6 @@ class Profile(APIView):
             raise Http404("Error")
 
     def get(self,request,username,format=None):
-
 
         account = self.get_object(username)
         acc=Account.objects.get(user_id=account)
@@ -128,3 +129,48 @@ class Invitation(APIView):
             a.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DirectAnswer(APIView):
+    serializer_class = DirectSerializer
+    permission_classes = (AllowAny,)
+
+
+    def get(self,request,dept,format=None):
+        account=PortalQuestion.objects.filter(asked_by_id=dept)
+        a=[ ]
+
+
+        for i in account:
+
+
+            recommend=PortalRecommendation.objects.filter(ques_id=i.id)
+            serializer=self.serializer_class(recommend,many=True)
+            y={'text':i.text,
+            'answer':i.answer,
+             'reco':serializer.data}
+            a.append(y)
+
+        return Response(a)
+
+
+class InvitedAnswer(APIView):
+    serializer_class = DirectSerializer
+    permission_classes = (AllowAny,)
+
+
+    def get(self,request,dept,format=None):
+        account=PortalQuestion.objects.filter(asked_by_id=dept)
+        a=[ ]
+
+
+        for i in account:
+
+
+            recommend=PortalRecommendation.objects.filter(ques_id=i.id)
+            serializer=self.serializer_class(recommend,many=True)
+            y={'text':i.text,
+            'recommend':serializer.data}
+            a.append(y)
+
+        return Response(a)

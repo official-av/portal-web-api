@@ -74,8 +74,10 @@ class InviteSerializer(serializers.ModelSerializer):
             a.save()
             return a
 
-class subDirectSerializer(serializers.ModelSerializer):
+
+
+class DirectSerializer(serializers.ModelSerializer):
 
     class Meta:
-        modal=PortalQuestion
-        fields=('text','answer')
+        model=PortalRecommendation
+        fields=('recommendation_answer','department_id')
