@@ -73,3 +73,9 @@ class InviteSerializer(serializers.ModelSerializer):
             a=PortalRecommendation.objects.create(ques_id=validated_data['ques_id'],department_id=validated_data['dept'])
             a.save()
             return a
+
+class subDirectSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        modal=PortalQuestion
+        fields=('text','answer')
