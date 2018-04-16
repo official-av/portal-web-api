@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from .serializers import AccountSerializer,AccountGetSerializer,QuestionSerializer,InviteSerializer,DirectSerializer,DeptSerializer
+from .serializers import AccountSerializer,AccountGetSerializer,QuestionSerializer,InviteSerializer,DirectSerializer,DeptSerializer,Question
 from .models import Account,PortalQuestion,PortalRecommendation,Department
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
@@ -45,7 +45,7 @@ class Update(APIView):  #ChangePAssword
 
 class Profile(APIView): #ViewProfile
     serializer_class = AccountGetSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
 
     def get_object(self, username):
@@ -55,12 +55,18 @@ class Profile(APIView): #ViewProfile
         except User.DoesNotExist:
             raise Http404("Error")
 
+
     def get(self,request,username,format=None):
+        a=[]
+
 
         account = self.get_object(username)
         acc=Account.objects.get(user_id=account)
         serializer=self.serializer_class(acc)
-        return Response(serializer.data)
+        a.append({'username':username})
+        a.append(serializer.data)
+
+        return Response(a)
 
 class OtpRegister(APIView):  #OTP
 
@@ -164,7 +170,7 @@ class InvitedAnswer(APIView):            #Retrieve Invited Answer With Question
 
 
     def get(self,request,dept_id,format=None):
-        account=PortalQuestion.objects.filter(asked_to=dept_id,is_collaborative=True)
+        account=PortalQuestion.objects.filter(asked_to=dept_id)
         a=[ ]
 
 
@@ -196,4 +202,36 @@ class DepartmentList(APIView):           #Retrievelist
         list_name=Department.objects.all()
         serializer=self.serializer_class(list_name,many=True)
 
+        return Response(serializer.data)
+
+
+class DirectReply(APIView):
+    serializer_class= Question
+    permission_classes=(AllowAny,)
+
+    def post(self,request,format=None):
+
+        data=request.data
+        print(data)
+        answ=PortalQuestion.objects.get(pk=data['ques_id'])
+        answ.answer= data['answer']
+        answ.answered_on= data['answered_on']
+        answ.save()
+        serializer=self.serializer_class(answ)
+        return Response(serializer.data)
+
+class InviteReply(APIView):
+
+    serializer_class=DirectSerializer
+    permission_classes=(AllowAny,)
+
+    def post(self,request,format=None):
+
+        data=request.data
+        print(data)
+        answ=PortalRecommendation.objects.get(ques_id=data['ques_id'],invited_dept=data['invited_dept'])
+        answ.rec_answer= data['rec_answer']
+        answ.answered_on= data['answered_on']
+        answ.save()
+        serializer=self.serializer_class(answ)
         return Response(serializer.data)

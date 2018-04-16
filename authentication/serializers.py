@@ -89,3 +89,9 @@ class DeptSerializer(serializers.ModelSerializer):
     class Meta:
         model=Department
         fields=('id','name')
+
+class Question(serializers.ModelSerializer):
+
+    class Meta:
+        model=PortalQuestion
+        fields='__all__'
