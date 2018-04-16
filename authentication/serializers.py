@@ -81,3 +81,10 @@ class DirectSerializer(serializers.ModelSerializer):
     class Meta:
         model=PortalRecommendation
         fields=('recommendation_answer','department_id')
+
+
+class DeptSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=Department
+        fields=('id','department_name')

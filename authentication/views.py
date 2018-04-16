@@ -2,8 +2,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from .serializers import AccountSerializer,AccountGetSerializer,QuestionSerializer,InviteSerializer,DirectSerializer
-from .models import Account,PortalQuestion,PortalRecommendation
+from .serializers import AccountSerializer,AccountGetSerializer,QuestionSerializer,InviteSerializer,DirectSerializer,DeptSerializer
+from .models import Account,PortalQuestion,PortalRecommendation,Department
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
@@ -12,7 +12,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
-class AuthRegister(APIView): //Register  API
+class AuthRegister(APIView): #Register  API
     """
     Register a new user.
     """
@@ -27,7 +27,7 @@ class AuthRegister(APIView): //Register  API
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class Update(APIView):  //ChangePAssword
+class Update(APIView):  #ChangePAssword
 
 
 
@@ -43,7 +43,7 @@ class Update(APIView):  //ChangePAssword
 
         return Response({'sucess':'No'}, status=status.HTTP_400_BAD_REQUEST)
 
-class Profile(APIView): //ViewProfile
+class Profile(APIView): #ViewProfile
     serializer_class = AccountGetSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -62,7 +62,7 @@ class Profile(APIView): //ViewProfile
         serializer=self.serializer_class(acc)
         return Response(serializer.data)
 
-class OtpRegister(APIView):  //OTP
+class OtpRegister(APIView):  #OTP
 
     def post(self,request,format=None):
         length=5
@@ -75,7 +75,7 @@ class OtpRegister(APIView):  //OTP
 
         return Response({'text':b}, status=status.HTTP_201_CREATED)
 
-class CreateQuestion(APIView):  //CreateQuestion
+class CreateQuestion(APIView):  #CreateQuestion
     serializer_class = QuestionSerializer
     permission_classes = (AllowAny,)
 
@@ -87,7 +87,7 @@ class CreateQuestion(APIView):  //CreateQuestion
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class checkPassword(APIView):           //Verify username and Password
+class checkPassword(APIView):           #Verify username and Password
 
 
     def post(self,request,format=None):
@@ -98,7 +98,7 @@ class checkPassword(APIView):           //Verify username and Password
         else:
             return Response({'response':'error'},status=status.HTTP_400_BAD_REQUEST)
 
-class checkUsername(APIView):                       //Check Username
+class checkUsername(APIView):                       #Check Username
 
     def get_object(self, username):
         try:
@@ -113,7 +113,7 @@ class checkUsername(APIView):                       //Check Username
         else:
             return Response({'user':'does not exists'},status=status.HTTP_400_BAD_REQUEST)
 
-class Invitation(APIView):                           //Invite Other Ministeries For Collaboration
+class Invitation(APIView):                           #Invite Other Ministeries For Collaboration
 
     serializer_class = InviteSerializer
     permission_classes = (AllowAny,)
@@ -131,7 +131,7 @@ class Invitation(APIView):                           //Invite Other Ministeries 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class DirectAnswer(APIView):            //Retrieve All Answer With Question
+class DirectAnswer(APIView):            #Retrieve All Answer With Question
     serializer_class = DirectSerializer
     permission_classes = (AllowAny,)
 
@@ -154,7 +154,7 @@ class DirectAnswer(APIView):            //Retrieve All Answer With Question
         return Response(a)
 
 
-class InvitedAnswer(APIView):        //Retrieve Invited Answer
+class InvitedAnswer(APIView):        #Retrieve Invited Answer
     serializer_class = DirectSerializer
     permission_classes = (AllowAny,)
 
@@ -174,3 +174,16 @@ class InvitedAnswer(APIView):        //Retrieve Invited Answer
             a.append(y)
 
         return Response(a)
+
+
+class DepartmentList(APIView):           #Retrievelist
+
+    serializer_class= DeptSerializer
+    permission_classes=(AllowAny,)
+
+    def get(self,request,format=None):
+
+        list_name=Department.objects.all()
+        serializer=self.serializer_class(list_name,many=True)
+
+        return Response(serializer.data)
