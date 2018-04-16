@@ -12,6 +12,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
+
 class AuthRegister(APIView): #Register  API
     """
     Register a new user.
