@@ -54,15 +54,16 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=PortalQuestion
-        fields=('text','timestamp','deadline','asked_by_id','answer','answered_on')
+        fields=('content','asked_on','deadline','asked_to','answer','answered_on')
 
         def create(self,validated):
             a=PortalQuestion.objects.create(
-                text = validated_data['text'],timestamp = validated_data['timestamp'],deadline =validated_data['deadline'],
-           asked_by_id = validated_data['asked_by_id'])
+                content = validated_data['content'],asked_on = validated_data['asked_on'],deadline =validated_data['deadline'],
+           asked_to = validated_data['asked_to'])
 
             a.save()
             return a
+
 class InviteSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -70,7 +71,7 @@ class InviteSerializer(serializers.ModelSerializer):
         fields='__all__'
 
         def create(self,validated):
-            a=PortalRecommendation.objects.create(ques_id=validated_data['ques_id'],department_id=validated_data['dept'])
+            a=PortalRecommendation.objects.create(ques_id=validated_data['ques_id'],invited_dept=validated_data['invited_dept'])
             a.save()
             return a
 
@@ -80,11 +81,11 @@ class DirectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=PortalRecommendation
-        fields=('recommendation_answer','department_id')
+        fields=('rec_answer','invited_dept')
 
 
 class DeptSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=Department
-        fields=('id','department_name')
+        fields=('id','name')

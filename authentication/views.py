@@ -137,7 +137,7 @@ class DirectAnswer(APIView):            #Retrieve All Answer With Question
 
 
     def get(self,request,dept,format=None):
-        account=PortalQuestion.objects.filter(asked_by_id=dept)
+        account=PortalQuestion.objects.filter(asked_to=dept)
         a=[ ]
 
 
@@ -146,7 +146,7 @@ class DirectAnswer(APIView):            #Retrieve All Answer With Question
 
             recommend=PortalRecommendation.objects.filter(ques_id=i.id)
             serializer=self.serializer_class(recommend,many=True)
-            y={'text':i.text,
+            y={'content':i.content,
             'answer':i.answer,
              'reco':serializer.data}
             a.append(y)
@@ -160,7 +160,7 @@ class InvitedAnswer(APIView):        #Retrieve Invited Answer
 
 
     def get(self,request,dept,format=None):
-        account=PortalQuestion.objects.filter(asked_by_id=dept)
+        account=PortalQuestion.objects.filter(asked_to=dept)
         a=[ ]
 
 
@@ -169,7 +169,7 @@ class InvitedAnswer(APIView):        #Retrieve Invited Answer
 
             recommend=PortalRecommendation.objects.filter(ques_id=i.id)
             serializer=self.serializer_class(recommend,many=True)
-            y={'text':i.text,
+            y={'content':i.text,
             'recommend':serializer.data}
             a.append(y)
 

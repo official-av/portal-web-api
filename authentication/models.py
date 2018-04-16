@@ -4,7 +4,7 @@ from django.contrib.auth.models import PermissionsMixin,User
 
 
 class Department(models.Model):
-    department_name=models.CharField(unique=True,max_length=100)
+    name=models.CharField(unique=True,max_length=100)
 
     def __str__(self):
         return str(self.id)
@@ -28,11 +28,11 @@ class Account(models.Model):
 class PortalQuestion(models.Model):
 
 
-    text = models.CharField(max_length=500, null=False)
-    timestamp = models.DateTimeField("Date Question is Published")
+    content = models.CharField(max_length=500, null=False)
+    asked_on = models.DateTimeField("Date Question is Published")
     deadline = models.DateTimeField("Date to be Answered Within")
-    asked_by_id = models.ForeignKey(Department, on_delete=models.CASCADE)
-    is_recommended = models.BooleanField(default=False)
+    asked_to = models.ForeignKey(Department, on_delete=models.CASCADE)
+    is_collaborative = models.BooleanField(default=False)
     answer=models.CharField(max_length=500,null=True)
     answered_on=models.DateTimeField("Answered On",null=True)
 
@@ -43,8 +43,8 @@ class PortalQuestion(models.Model):
 class PortalRecommendation(models.Model):
 
     ques_id = models.ForeignKey(PortalQuestion, on_delete=models.CASCADE)
-    department_id = models.ForeignKey(Department, on_delete=models.CASCADE)
-    recommendation_answer = models.CharField(max_length=500, null=True)
+    invited_dept = models.ForeignKey(Department, on_delete=models.CASCADE)
+    rec_answer = models.CharField(max_length=500, null=True)
     asked_on = models.DateTimeField("Question Asked On")
     answered_on = models.DateTimeField("Question Answered On",null=True)
 
