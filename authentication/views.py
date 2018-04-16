@@ -12,7 +12,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
-class AuthRegister(APIView):
+class AuthRegister(APIView): //Register  API
     """
     Register a new user.
     """
@@ -27,7 +27,7 @@ class AuthRegister(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class Update(APIView):
+class Update(APIView):  //ChangePAssword
 
 
 
@@ -43,7 +43,7 @@ class Update(APIView):
 
         return Response({'sucess':'No'}, status=status.HTTP_400_BAD_REQUEST)
 
-class Profile(APIView):
+class Profile(APIView): //ViewProfile
     serializer_class = AccountGetSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -62,7 +62,7 @@ class Profile(APIView):
         serializer=self.serializer_class(acc)
         return Response(serializer.data)
 
-class OtpRegister(APIView):
+class OtpRegister(APIView):  //OTP
 
     def post(self,request,format=None):
         length=5
@@ -75,7 +75,7 @@ class OtpRegister(APIView):
 
         return Response({'text':b}, status=status.HTTP_201_CREATED)
 
-class CreateQuestion(APIView):
+class CreateQuestion(APIView):  //CreateQuestion
     serializer_class = QuestionSerializer
     permission_classes = (AllowAny,)
 
@@ -87,7 +87,7 @@ class CreateQuestion(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class checkPassword(APIView):
+class checkPassword(APIView):           //Verify username and Password
 
 
     def post(self,request,format=None):
@@ -98,7 +98,7 @@ class checkPassword(APIView):
         else:
             return Response({'response':'error'},status=status.HTTP_400_BAD_REQUEST)
 
-class checkUsername(APIView):
+class checkUsername(APIView):                       //Check Username
 
     def get_object(self, username):
         try:
@@ -113,7 +113,7 @@ class checkUsername(APIView):
         else:
             return Response({'user':'does not exists'},status=status.HTTP_400_BAD_REQUEST)
 
-class Invitation(APIView):
+class Invitation(APIView):                           //Invite Other Ministeries For Collaboration
 
     serializer_class = InviteSerializer
     permission_classes = (AllowAny,)
@@ -131,7 +131,7 @@ class Invitation(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class DirectAnswer(APIView):
+class DirectAnswer(APIView):            //Retrieve All Answer With Question
     serializer_class = DirectSerializer
     permission_classes = (AllowAny,)
 
@@ -154,7 +154,7 @@ class DirectAnswer(APIView):
         return Response(a)
 
 
-class InvitedAnswer(APIView):
+class InvitedAnswer(APIView):        //Retrieve Invited Answer
     serializer_class = DirectSerializer
     permission_classes = (AllowAny,)
 
