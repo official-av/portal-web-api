@@ -6,7 +6,7 @@ from .serializers import AccountSerializer,AccountGetSerializer,QuestionSerializ
 from .models import Account,PortalQuestion,PortalRecommendation
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 import json,nexmo,random
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
@@ -45,7 +45,7 @@ class Update(APIView):
 
 class Profile(APIView):
     serializer_class = AccountGetSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
 
     def get_object(self, username):
