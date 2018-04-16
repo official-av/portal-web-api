@@ -205,7 +205,7 @@ class DepartmentList(APIView):           #Retrievelist
         return Response(serializer.data)
 
 
-class DirectReply(APIView):
+class DirectReply(APIView):  #Direct Reply
     serializer_class= Question
     permission_classes=(AllowAny,)
 
@@ -220,7 +220,7 @@ class DirectReply(APIView):
         serializer=self.serializer_class(answ)
         return Response(serializer.data)
 
-class InviteReply(APIView):
+class InviteReply(APIView): #Invited Reply
 
     serializer_class=DirectSerializer
     permission_classes=(AllowAny,)
