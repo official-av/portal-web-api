@@ -81,7 +81,7 @@ class DirectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=PortalRecommendation
-        fields=('rec_answer','invited_dept')
+        fields='__all__'
 
 
 class DeptSerializer(serializers.ModelSerializer):

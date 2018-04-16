@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import  AuthRegister,Update,Profile,OtpRegister,CreateQuestion,checkPassword,checkUsername,Invitation,DirectAnswer,DepartmentList
+from .views import  AuthRegister,Update,Profile,OtpRegister,CreateQuestion,checkPassword,checkUsername,Invitation,DirectAnswer,DepartmentList,InvitedAnswer
 from rest_framework_jwt.views import obtain_jwt_token
 from rest_framework_jwt.views import verify_jwt_token
 
@@ -12,7 +12,8 @@ urlpatterns=[
   url(r'^otp/$',OtpRegister.as_view()),
   url(r'^create/',CreateQuestion.as_view()),
   url(r'^viewprofile/(?P<username>[A-Za-z0-9]+)/$', Profile.as_view()),
-  url(r'^directans/(?P<dept>[0-9]+)/$', DirectAnswer.as_view()),
+  url(r'^directans/(?P<dept_id>[0-9]+)/$', DirectAnswer.as_view()),
+  url(r'^inviteans/(?P<dept_id>[0-9]+)/$', InvitedAnswer.as_view()),
   url(r'^check/$',checkPassword.as_view()),
   url(r'^username/$',checkUsername.as_view()),
   url(r'^invite/$',Invitation.as_view()),

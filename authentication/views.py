@@ -81,6 +81,7 @@ class CreateQuestion(APIView):  #CreateQuestion
 
 
     def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -125,7 +126,7 @@ class Invitation(APIView):                           #Invite Other Ministeries F
         if serializer.is_valid():
             serializer.save()
             a=PortalQuestion.objects.get(pk=data['ques_id'])
-            a.is_recommended=True
+            a.is_collaborative=True
             a.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -136,44 +137,53 @@ class DirectAnswer(APIView):            #Retrieve All Answer With Question
     permission_classes = (AllowAny,)
 
 
-    def get(self,request,dept,format=None):
-        account=PortalQuestion.objects.filter(asked_to=dept)
+    def get(self,request,dept_id,format=None):
+        account=PortalQuestion.objects.filter(asked_to=dept_id)
         a=[ ]
 
 
         for i in account:
-
-
             recommend=PortalRecommendation.objects.filter(ques_id=i.id)
             serializer=self.serializer_class(recommend,many=True)
             y={'content':i.content,
+            'asked_on':i.asked_on,
+            'asked_to':dept_id,
+            'deadline':i.deadline,
+            'answered_on':i.answered_on,
             'answer':i.answer,
-             'reco':serializer.data}
+            'is_collaborative':i.is_collaborative,
+
+             'collaborations':serializer.data}
             a.append(y)
 
         return Response(a)
 
-
-class InvitedAnswer(APIView):        #Retrieve Invited Answer
+class InvitedAnswer(APIView):            #Retrieve Invited Answer With Question
     serializer_class = DirectSerializer
     permission_classes = (AllowAny,)
 
 
-    def get(self,request,dept,format=None):
-        account=PortalQuestion.objects.filter(asked_to=dept)
+    def get(self,request,dept_id,format=None):
+        account=PortalQuestion.objects.filter(asked_to=dept_id,is_collaborative=True)
         a=[ ]
 
 
         for i in account:
-
-
             recommend=PortalRecommendation.objects.filter(ques_id=i.id)
             serializer=self.serializer_class(recommend,many=True)
-            y={'content':i.text,
-            'recommend':serializer.data}
+            y={'content':i.content,
+            'asked_on':i.asked_on,
+            'asked_to':dept_id,
+            'deadline':i.deadline,
+            'answered_on':i.answered_on,
+            'answer':i.answer,
+            'is_collaborative':i.is_collaborative,
+
+             'collaborations':serializer.data}
             a.append(y)
 
         return Response(a)
+
 
 
 class DepartmentList(APIView):           #Retrievelist
