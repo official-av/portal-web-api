@@ -58,16 +58,15 @@ class Profile(APIView): #ViewProfile
 
 
     def get(self,request,username,format=None):
-        a=[]
+
 
 
         account = self.get_object(username)
         acc=Account.objects.get(user_id=account)
         serializer=self.serializer_class(acc)
-        a.append({'username':username})
-        a.append(serializer.data)
 
-        return Response(a)
+
+        return Response(serializer.data)
 
 class OtpRegister(APIView):  #OTP
 
@@ -229,7 +228,6 @@ class InviteReply(APIView): #Invited Reply
     def post(self,request,format=None):
 
         data=request.data
-        print(data)
         answ=PortalRecommendation.objects.get(ques_id=data['ques_id'],invited_dept=data['invited_dept'])
         answ.rec_answer= data['rec_answer']
         answ.answered_on= data['answered_on']
