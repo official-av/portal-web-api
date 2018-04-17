@@ -158,6 +158,7 @@ class DirectAnswer(APIView):            #Retrieve All Answer With Question
             'answered_on':i.answered_on,
             'answer':i.answer,
             'is_collaborative':i.is_collaborative,
+            'ques_id':i.id,
 
              'collaborations':serializer.data}
             a.append(y)
