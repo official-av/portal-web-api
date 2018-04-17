@@ -68,7 +68,7 @@ class InviteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=PortalRecommendation
-        fields='__all__'
+        fields=('ques_id','invited_dept','rec_answer','asked_on','answered_on')
 
         def create(self,validated):
             a=PortalRecommendation.objects.create(ques_id=validated_data['ques_id'],invited_dept=validated_data['invited_dept'])
