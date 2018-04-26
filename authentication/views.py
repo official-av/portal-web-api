@@ -11,6 +11,8 @@ import json,nexmo,random
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 class AuthRegister(APIView): #Register  API
@@ -238,3 +240,25 @@ class InviteReply(APIView): #Invited Reply
         answ.save()
         serializer=self.serializer_class(answ)
         return Response(serializer.data)
+
+ 
+class EmailNotify(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self,request,format=None):
+        try:
+            data = request.data
+            msg_plain = "Email Working"
+            from_email = settings.EMAIL_HOST_USER
+            to_email = User.objects.get(username=data['username']).email
+            send_mail(
+                'NOTIFICATION EMAIL',
+                msg_plain,
+                from_email,
+                [to_email],
+                fail_silently=False
+            )
+            return Response({'Status':'SENT'})
+
+        except:
+            return Response({'Status':'FALSE'})

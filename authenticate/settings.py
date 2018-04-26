@@ -26,7 +26,11 @@ SECRET_KEY = '73xlrf$xc=9u+t6#pbw@mrl2p_fpg^o3yowpl##eh6j1^c&%3c'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+EMAIL_HOST ='smtp.gmail.com'
+EMAIL_HOST_USER = 'srivastavapankhuri.12@gmail.com'
+EMAIL_HOST_PASSWORD = 'pankhuri123'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 # Application definition
 
