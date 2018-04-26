@@ -126,17 +126,20 @@ class Invitation(APIView):                           #Invite Other Ministeries F
     permission_classes = (AllowAny,)
 
 
+    print(InviteSerializer())
     def post(self, request, format=None):
-        data=request.data
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            a=PortalQuestion.objects.get(pk=data['ques_id'])
-            a.is_collaborative=True
-            a.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        value=request.data
+        for i in range(0,len(value['student'])):
+            serializer = self.serializer_class(data=value['student'][i])
+            print(serializer)
+            print(serializer.is_valid)
+            if serializer.is_valid():
+                a=PortalQuestion.objects.get(pk=value['student'][i]['ques_id'])
+                print(a)
+                a.is_collaborative=True
+                a.save()
+                serializer.save()
+        return Response({'yes':'0'}, status=status.HTTP_400_BAD_REQUEST)
 
 class DirectAnswer(APIView):            #Retrieve All Answer With Question
     serializer_class = DirectSerializer
