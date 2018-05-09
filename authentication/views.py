@@ -185,7 +185,7 @@ class InvitedAnswer(APIView):            #Retrieve Invited Answer With Question
                 account=PortalQuestion.objects.get(pk=i.ques_id.id)
                 y={'content':account.content,
                 'asked_on':account.asked_on,
-                'asked_to':account.invited_dept,
+                'asked_to':account.asked_to,
                 'deadline':account.deadline,
                 'rec_answer':i.rec_answer,
                 'answered_on':i.answered_on,
