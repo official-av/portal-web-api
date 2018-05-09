@@ -30,7 +30,7 @@ class AuthRegister(APIView): #Register  API
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class Update(APIView):  #ChangePAssword
+class Update(APIView):  #ChangePassword
 
 
 

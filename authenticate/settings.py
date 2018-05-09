@@ -153,3 +153,11 @@ STATIC_URL = '/static/'
 # CORS Config
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+# JWT Config
+
+import datetime
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+}
