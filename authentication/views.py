@@ -174,24 +174,23 @@ class InvitedAnswer(APIView):            #Retrieve Invited Answer With Question
     serializer_class = DirectSerializer
     permission_classes = (AllowAny,)
 
-
     def get(self,request,dept_id,format=None):
-        account=PortalQuestion.objects.filter(asked_to=dept_id)
-        a=[ ]
 
 
-        for i in account:
-            recommend=PortalRecommendation.objects.filter(ques_id=i.id)
-            serializer=self.serializer_class(recommend,many=True)
-            y={'content':i.content,
-            'asked_on':i.asked_on,
-            'asked_to':dept_id,
-            'deadline':i.deadline,
-            'answered_on':i.answered_on,
-            'answer':i.answer,
-            'is_collaborative':i.is_collaborative,
 
-             'collaborations':serializer.data}
+            recommend=PortalRecommendation.objects.filter(invited_dept=dept_id)
+            a=[]
+
+            for i in recommend:
+                account=PortalQuestion.objects.get(pk=recommend.ques_id)
+                y={'content':account.content,
+                'asked_on':account.asked_on,
+                'asked_to':account.dept_id,
+                'deadline':account.deadline,
+                'rec_answer':i.rec_answer,
+                'answered_on':i.answered_on,
+                'recasked_on':i.asked_on
+                }
             a.append(y)
 
         return Response(a)
@@ -241,7 +240,7 @@ class InviteReply(APIView): #Invited Reply
         serializer=self.serializer_class(answ)
         return Response(serializer.data)
 
- 
+
 class EmailNotify(APIView):
     permission_classes = (AllowAny,)
 
