@@ -190,7 +190,9 @@ class InvitedAnswer(APIView):            #Retrieve Invited Answer With Question
                 'deadline':account.deadline,
                 'rec_answer':i.rec_answer,
                 'answered_on':i.answered_on,
-                'recasked_on':i.asked_on
+                'recasked_on':i.asked_on,
+                'ques_id':i.ques_id.id,
+                'answer':account.answer,
                 }
                 a.append(y)
                 print(y)
