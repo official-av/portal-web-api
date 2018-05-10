@@ -182,11 +182,18 @@ class InvitedAnswer(APIView):            #Retrieve Invited Answer With Question
             a=[]
 
             for i in recommend:
+<<<<<<< HEAD
                 account=PortalQuestion.objects.get(id=i.ques_id.id)
                 print(account)
                 y={'content':account.content,
                 'asked_on':account.asked_on,
                 'asked_to':account.asked_to.id,
+=======
+                account=PortalQuestion.objects.get(pk=i.ques_id.id)
+                y={'content':account.content,
+                'asked_on':account.asked_on,
+                'asked_to':account.asked_to,
+>>>>>>> eddba565a4a101da8348564861842ba1fd107e6d
                 'deadline':account.deadline,
                 'rec_answer':i.rec_answer,
                 'answered_on':i.answered_on,
