@@ -16,12 +16,8 @@ from django.conf import settings
 
 
 class AuthRegister(APIView): #Register  API
-    """
-    Register a new user.
-    """
     serializer_class = AccountSerializer
     permission_classes = (AllowAny,)
-
 
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
@@ -31,9 +27,6 @@ class AuthRegister(APIView): #Register  API
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class Update(APIView):  #ChangePassword
-
-
-
     def post(self,request,format=None):
         data=request.data
         a=User.objects.get(username=data['username'])
@@ -49,7 +42,6 @@ class Update(APIView):  #ChangePassword
 class Profile(APIView): #ViewProfile
     serializer_class = AccountGetSerializer
 
-
     def get_object(self, username):
         try:
 
@@ -57,27 +49,21 @@ class Profile(APIView): #ViewProfile
         except User.DoesNotExist:
             raise Http404("Error")
 
-
     def get(self,request,username,format=None):
-
-
-
         account = self.get_object(username)
         acc=Account.objects.get(user_id=account)
         serializer=self.serializer_class(acc)
 
-
         return Response(serializer.data)
 
 class OtpRegister(APIView):  #OTP
-
     permission_classes = (AllowAny,)
+
     def post(self,request,format=None):
         length=5
         data=request.data
-
         mobile_number=data['phonenum']
-        client = nexmo.Client(key='3f8c0d9d', secret='3f8c0d9d')
+        client = nexmo.Client(key=settings.NEXMO_KEY, secret=settings.NEXMO_SECRET)
         b=random.sample(range(10**(length-1), 10**length), 1)[0]
         client.send_message({'from': '917065246961', 'to': mobile_number, 'text': b})
 
@@ -87,7 +73,6 @@ class CreateQuestion(APIView):  #CreateQuestion
     serializer_class = QuestionSerializer
     permission_classes = (AllowAny,)
 
-
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
@@ -95,10 +80,7 @@ class CreateQuestion(APIView):  #CreateQuestion
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class checkPassword(APIView):           #Verify username and Password
-
-
     def post(self,request,format=None):
         data=request.data
         account = authenticate(username=data['username'],password=data['password'])
@@ -125,11 +107,9 @@ class checkUsername(APIView):                       #Check Username
             return Response({'user':'does not exists'},status=status.HTTP_400_BAD_REQUEST)
 
 class Invitation(APIView):                           #Invite Other Ministeries For Collaboration
-
     serializer_class = InviteSerializer
-
-
     print(InviteSerializer())
+
     def post(self, request, format=None):
         value=request.data
         for i in range(0,len(value['student'])):
@@ -147,11 +127,9 @@ class Invitation(APIView):                           #Invite Other Ministeries F
 class DirectAnswer(APIView):            #Retrieve All Answer With Question
     serializer_class = DirectSerializer
 
-
     def get(self,request,dept_id,format=None):
         account=PortalQuestion.objects.filter(asked_to=dept_id)
         a=[ ]
-
 
         for i in account:
             recommend=PortalRecommendation.objects.filter(ques_id=i.id)
@@ -174,9 +152,6 @@ class InvitedAnswer(APIView):            #Retrieve Invited Answer With Question
     serializer_class = DirectSerializer
 
     def get(self,request,dept_id,format=None):
-
-
-
             recommend=PortalRecommendation.objects.filter(invited_dept=dept_id)
             a=[]
 
@@ -198,8 +173,6 @@ class InvitedAnswer(APIView):            #Retrieve Invited Answer With Question
 
             return Response(a)
 
-
-
 class DepartmentList(APIView):           #Retrievelist
 
     serializer_class= DeptSerializer
@@ -211,7 +184,6 @@ class DepartmentList(APIView):           #Retrievelist
         serializer=self.serializer_class(list_name,many=True)
 
         return Response(serializer.data)
-
 
 class DirectReply(APIView):  #Direct Reply
     serializer_class= Question
@@ -270,7 +242,7 @@ class TextNotify(APIView):  #OTP
         data=request.data
         mobile_number=data['phonenum']
         message=data['message']
-        client = nexmo.Client(key='3f8c0d9d', secret='3f8c0d9d')
+        client = nexmo.Client(key=settings.NEXMO_KEY, secret=settings.NEXMO_SECRET)
         client.send_message({'from': '917065246961', 'to': mobile_number, 'text': message})
 
         return Response({'success':'true'}, status=status.HTTP_201_CREATED)

@@ -26,11 +26,17 @@ SECRET_KEY = '73xlrf$xc=9u+t6#pbw@mrl2p_fpg^o3yowpl##eh6j1^c&%3c'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+
+# MAIL CONFIG: replace email host user and password with suitable data
 EMAIL_HOST ='smtp.gmail.com'
 EMAIL_HOST_USER = 'srivastavapankhuri.12@gmail.com'
 EMAIL_HOST_PASSWORD = 'pankhuri123'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+# SMS/Text CONFIG: Using Nexmo's sms api, replace key and secret with suitable values
+NEXMO_KEY ='3f8c0d9d'
+NEXMO_SECRET='3f8c0d9d'
 
 # Application definition
 
