@@ -20,5 +20,5 @@ urlpatterns=[
   url(r'^deptlist/$',DepartmentList.as_view()),
   url(r'^dreply/$',DirectReply.as_view()),
   url(r'^ireply/$',InviteReply.as_view()),
-  url(r'^sendmail/$,EmailNotify.as_view())
+  url(r'^sendmail/$',EmailNotify.as_view())
 ]
