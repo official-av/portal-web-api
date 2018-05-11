@@ -29,10 +29,10 @@ ALLOWED_HOSTS = ['*']
 
 # MAIL CONFIG: replace email host user and password with suitable data
 EMAIL_HOST ='smtp.gmail.com'
-EMAIL_HOST_USER = 'srivastavapankhuri.12@gmail.com'
-EMAIL_HOST_PASSWORD = 'pankhuri123'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'mailproject27@gmail.com'
+EMAIL_HOST_PASSWORD = 'Test6789'
+EMAIL_PORT = 25
+EMAIL_USE_TLS = False
 
 # SMS/Text CONFIG: Using Nexmo's sms api, replace key and secret with suitable values
 NEXMO_KEY ='3f8c0d9d'
