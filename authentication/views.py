@@ -119,7 +119,7 @@ class checkUsername(APIView):                       #Check Username
     def post(self,request,format=None):
         account=self.get_object(request.data['username'])
         if(account!=None):
-            return Response({'user':'exists'},status=status.HTTP_201_CREATED)
+            return Response({'user':'exists'.'phonenum':account.phonenum},status=status.HTTP_201_CREATED)
         else:
             return Response({'user':'does not exists'},status=status.HTTP_400_BAD_REQUEST)
 
