@@ -48,7 +48,6 @@ class Update(APIView):  #ChangePassword
 
 class Profile(APIView): #ViewProfile
     serializer_class = AccountGetSerializer
-    permission_classes = (AllowAny,)
 
 
     def get_object(self, username):
@@ -72,6 +71,7 @@ class Profile(APIView): #ViewProfile
 
 class OtpRegister(APIView):  #OTP
 
+    permission_classes = (AllowAny,)
     def post(self,request,format=None):
         length=5
         data=request.data
@@ -109,6 +109,7 @@ class checkPassword(APIView):           #Verify username and Password
 
 class checkUsername(APIView):                       #Check Username
 
+    permission_classes = (AllowAny,)
     def get_object(self, username):
         try:
             return User.objects.get(username=username)
@@ -125,7 +126,6 @@ class checkUsername(APIView):                       #Check Username
 class Invitation(APIView):                           #Invite Other Ministeries For Collaboration
 
     serializer_class = InviteSerializer
-    permission_classes = (AllowAny,)
 
 
     print(InviteSerializer())
@@ -145,7 +145,6 @@ class Invitation(APIView):                           #Invite Other Ministeries F
 
 class DirectAnswer(APIView):            #Retrieve All Answer With Question
     serializer_class = DirectSerializer
-    permission_classes = (AllowAny,)
 
 
     def get(self,request,dept_id,format=None):
@@ -172,7 +171,6 @@ class DirectAnswer(APIView):            #Retrieve All Answer With Question
 
 class InvitedAnswer(APIView):            #Retrieve Invited Answer With Question
     serializer_class = DirectSerializer
-    permission_classes = (AllowAny,)
 
     def get(self,request,dept_id,format=None):
 
@@ -216,7 +214,6 @@ class DepartmentList(APIView):           #Retrievelist
 
 class DirectReply(APIView):  #Direct Reply
     serializer_class= Question
-    permission_classes=(AllowAny,)
 
     def post(self,request,format=None):
 
@@ -232,7 +229,6 @@ class DirectReply(APIView):  #Direct Reply
 class InviteReply(APIView): #Invited Reply
 
     serializer_class=DirectSerializer
-    permission_classes=(AllowAny,)
 
     def post(self,request,format=None):
 
