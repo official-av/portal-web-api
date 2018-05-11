@@ -262,3 +262,15 @@ class EmailNotify(APIView):
 
         except:
             return Response({'Status':'FALSE'})
+
+class TextNotify(APIView):  #OTP
+
+    permission_classes = (AllowAny,)
+    def post(self,request,format=None):
+        data=request.data
+        mobile_number=data['phonenum']
+        message=data['message']
+        client = nexmo.Client(key='3f8c0d9d', secret='3f8c0d9d')
+        client.send_message({'from': '917065246961', 'to': mobile_number, 'text': content})
+
+        return Response({'success':'true'}, status=status.HTTP_201_CREATED)
