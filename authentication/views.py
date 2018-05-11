@@ -271,6 +271,6 @@ class TextNotify(APIView):  #OTP
         mobile_number=data['phonenum']
         message=data['message']
         client = nexmo.Client(key='3f8c0d9d', secret='3f8c0d9d')
-        client.send_message({'from': '917065246961', 'to': mobile_number, 'text': content})
+        client.send_message({'from': '917065246961', 'to': mobile_number, 'text': message})
 
         return Response({'success':'true'}, status=status.HTTP_201_CREATED)
