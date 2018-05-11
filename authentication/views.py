@@ -77,9 +77,9 @@ class OtpRegister(APIView):  #OTP
         data=request.data
 
         mobile_number=data['phonenum']
-        client = nexmo.Client(key='66505af0', secret='cltyPLV3jQJQYYwX')
+        client = nexmo.Client(key='3f8c0d9d', secret='3f8c0d9d')
         b=random.sample(range(10**(length-1), 10**length), 1)[0]
-        client.send_message({'from': '919473805008', 'to': mobile_number, 'text': b})
+        client.send_message({'from': '917065246961', 'to': mobile_number, 'text': b})
 
         return Response({'text':b}, status=status.HTTP_201_CREATED)
 
