@@ -245,10 +245,10 @@ class InviteReply(APIView): #Invited Reply
 class EmailNotify(APIView):
     permission_classes = (AllowAny,)
 
-    def get(self,request,format=None):
+    def post(self,request,format=None):
         try:
-            data = request.data
-            msg_plain = "Email Working"
+            data=request.data
+            msg_plain = data['message']
             from_email = settings.EMAIL_HOST_USER
             to_email = User.objects.get(username=data['username']).email
             send_mail(
