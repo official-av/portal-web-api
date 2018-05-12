@@ -28,6 +28,7 @@ class AuthRegister(APIView): #Register  API
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class Update(APIView):  #ChangePassword
+    permission_classes = (AllowAny,)
     def post(self,request,format=None):
         data=request.data
         a=User.objects.get(username=data['username'])
@@ -107,7 +108,7 @@ class checkUsername(APIView):                       #Check Username
         account=self.get_object(request.data['username'])
         print(account)
         if(account!=None):
-            return Response({'user':account.id},status=status.HTTP_201_CREATED)
+            return Response({'user':account.phonenum},status=status.HTTP_201_CREATED)
         else:
             return Response({'user':'does not exists'},status=status.HTTP_400_BAD_REQUEST)
 
