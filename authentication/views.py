@@ -65,7 +65,7 @@ class OtpRegister(APIView):  #OTP
         b=random.sample(range(10**(length-1), 10**length), 1)[0]
         data=request.data
         mobile_number=data['phonenum']
-        client=Client(settings.TWILIO_SID,TWILIO_AUTH_TOKEN)
+        client=Client(settings.TWILIO_SID,settings.TWILIO_AUTH_TOKEN)
         client.messages.create(
             to=mobile_number,
             from_=settings.TWILIO_NUMBER,
@@ -247,7 +247,7 @@ class TextNotify(APIView):  #OTP
         data=request.data
         mobile_number=data['phonenum']
         message=data['message']
-        client=Client(settings.TWILIO_SID,TWILIO_AUTH_TOKEN)
+        client=Client(settings.TWILIO_SID,settings.TWILIO_AUTH_TOKEN)
         client.messages.create(
             to=mobile_number,
             from_=settings.TWILIO_NUMBER,
