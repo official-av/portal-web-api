@@ -250,7 +250,7 @@ class TextNotify(APIView):  #OTP
         client=Client(settings.TWILIO_SID,TWILIO_AUTH_TOKEN)
         client.messages.create(
             to=mobile_number,
-            from=settings.TWILIO_NUMBER,
+            from_=settings.TWILIO_NUMBER,
             body=message
         )
 
