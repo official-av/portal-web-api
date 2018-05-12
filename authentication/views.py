@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from django.conf import settings
+from twilio.rest import Client
 
 
 class AuthRegister(APIView): #Register  API
@@ -61,11 +62,15 @@ class OtpRegister(APIView):  #OTP
 
     def post(self,request,format=None):
         length=5
+        b=random.sample(range(10**(length-1), 10**length), 1)[0]
         data=request.data
         mobile_number=data['phonenum']
-        client = nexmo.Client(key=settings.NEXMO_KEY, secret=settings.NEXMO_SECRET)
-        b=random.sample(range(10**(length-1), 10**length), 1)[0]
-        client.send_message({'from': '917065246961', 'to': mobile_number, 'text': b})
+        client=Client(settings.TWILIO_SID,TWILIO_AUTH_TOKEN)
+        client.messages.create(
+            to=mobile_number,
+            from=settings.TWILIO_NUMBER,
+            body=b
+        )
 
         return Response({'text':b}, status=status.HTTP_201_CREATED)
 
@@ -242,7 +247,11 @@ class TextNotify(APIView):  #OTP
         data=request.data
         mobile_number=data['phonenum']
         message=data['message']
-        client = nexmo.Client(key=settings.NEXMO_KEY, secret=settings.NEXMO_SECRET)
-        client.send_message({'from': '917065246961', 'to': mobile_number, 'text': message})
+        client=Client(settings.TWILIO_SID,TWILIO_AUTH_TOKEN)
+        client.messages.create(
+            to=mobile_number,
+            from=settings.TWILIO_NUMBER,
+            body=message
+        )
 
         return Response({'success':'true'}, status=status.HTTP_201_CREATED)

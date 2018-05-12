@@ -34,9 +34,10 @@ EMAIL_HOST_PASSWORD = 'Test6789'
 EMAIL_PORT = 25
 EMAIL_USE_TLS = False
 
-# SMS/Text CONFIG: Using Nexmo's sms api, replace key and secret with suitable values
-NEXMO_KEY ='3f8c0d9d'
-NEXMO_SECRET='3f8c0d9d'
+# SMS/Text CONFIG: Using twilio's sms api, replace key and secret with suitable values
+TWILIO_SID='AC4d89a4713a12048d8da743ccaa773aaa'
+TWILIO_AUTH_TOKEN='c48e05d69223208efe8a7ff2f0f93443'
+TWILIO_NUMBER='+18503677352'
 
 # Application definition
 
