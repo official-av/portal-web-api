@@ -37,9 +37,9 @@ class Update(APIView):  #ChangePassword
 
             a.password=make_password(data['password'])
             a.save()
-            return Response({'sucess':'Yes'}, status=status.HTTP_201_CREATED)
+            return Response({'success':'Yes'}, status=status.HTTP_201_CREATED)
 
-        return Response({'sucess':'No'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'success':'No'}, status=status.HTTP_400_BAD_REQUEST)
 
 class Profile(APIView): #ViewProfile
     serializer_class = AccountGetSerializer
